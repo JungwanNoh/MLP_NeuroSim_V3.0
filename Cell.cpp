@@ -154,25 +154,25 @@ void AnalogNVM::WriteEnergyCalculation(double wireCapCol) {
 /* Ideal device (no weight update nonlinearity) */
 IdealDevice::IdealDevice(int x, int y) {
 	this->x = x; this->y = y;	// Cell location: x (column) and y (row) start from index 0
-	maxConductance = 5e-6;		// Maximum cell conductance (S)
-	minConductance = 100e-9;	    // Minimum cell conductance (S)
+    maxConductance = 1.9e-6;		// Maximum cell conductance (S)
+	minConductance = 1.319e-7;	// Minimum cell conductance (S)
 	avgMaxConductance = maxConductance; // Average maximum cell conductance (S)
 	avgMinConductance = minConductance; // Average minimum cell conductance (S)
 	conductance = minConductance;	// Current conductance (S) (dynamic variable)
 	conductancePrev = conductance;	// Previous conductance (S) (dynamic variable)
 	readVoltage = 0.5;	// On-chip read voltage (Vr) (V)
 	readPulseWidth = 5e-9;	// Read pulse width (s) (will be determined by ADC)
-	writeVoltageLTP = 2;	// Write voltage (V) for LTP or weight increase
-	writeVoltageLTD = 2;	// Write voltage (V) for LTD or weight decrease
-	writePulseWidthLTP = 10e-9;	// Write pulse width (s) for LTP or weight increase
-	writePulseWidthLTD = 10e-9;	// Write pulse width (s) for LTD or weight decrease
+	writeVoltageLTP = 2.7;	// Write voltage (V) for LTP or weight increase
+	writeVoltageLTD = -2;	// Write voltage (V) for LTD or weight decrease
+	writePulseWidthLTP = 10e-3;	// Write pulse width (s) for LTP or weight increase
+	writePulseWidthLTD = 10e-3;	// Write pulse width (s) for LTD or weight decrease
 	writeEnergy = 0;	// Dynamic variable for calculation of write energy (J)
-	maxNumLevelLTP = 64;	// Maximum number of conductance states during LTP or weight increase
-	maxNumLevelLTD = 64;	// Maximum number of conductance states during LTD or weight decrease
+	maxNumLevelLTP = 25;	// Maximum number of conductance states during LTP or weight increase
+	maxNumLevelLTD = 25;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
-	FeFET = false;		// True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
-	gateCapFeFET = 2.1717e-18;	// Gate capacitance of FeFET (F)
+	FeFET = true;		// True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
+	gateCapFeFET = 17.26e-9;	// Gate capacitance of FeFET (F)
 	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	nonIdenticalPulse = false;	// Use non-identical pulse scheme in weight update or not (should be false here)
@@ -258,25 +258,25 @@ void IdealDevice::Write(double deltaWeightNormalized, double weight, double minW
 /* Real Device */
 RealDevice::RealDevice(int x, int y) { 
 	this->x = x; this->y = y;	// Cell location: x (column) and y (row) start from index 0
-	maxConductance = 3.8462e-8;		// Maximum cell conductance (S)
-	minConductance = 3.0769e-9;	// Minimum cell conductance (S)
+	maxConductance = 1.9e-6;		// Maximum cell conductance (S)
+	minConductance = 1.319e-7;	// Minimum cell conductance (S)
 	avgMaxConductance = maxConductance; // Average maximum cell conductance (S)
 	avgMinConductance = minConductance; // Average minimum cell conductance (S)
 	conductance = minConductance;	// Current conductance (S) (dynamic variable)
 	conductancePrev = conductance;	// Previous conductance (S) (dynamic variable)
 	readVoltage = 0.5;	// On-chip read voltage (Vr) (V)
 	readPulseWidth = 5e-9;	// Read pulse width (s) (will be determined by ADC)
-	writeVoltageLTP = 3.2;	// Write voltage (V) for LTP or weight increase
-	writeVoltageLTD = 2.8;	// Write voltage (V) for LTD or weight decrease
-	writePulseWidthLTP = 300e-6;	// Write pulse width (s) for LTP or weight increase
-	writePulseWidthLTD = 300e-6;	// Write pulse width (s) for LTD or weight decrease
+	writeVoltageLTP = 2.7;	// Write voltage (V) for LTP or weight increase
+	writeVoltageLTD = -2;	// Write voltage (V) for LTD or weight decrease
+	writePulseWidthLTP = 10e-3;	// Write pulse width (s) for LTP or weight increase
+	writePulseWidthLTD = 10e-3;	// Write pulse width (s) for LTD or weight decrease
 	writeEnergy = 0;	// Dynamic variable for calculation of write energy (J)
-	maxNumLevelLTP = 97;	// Maximum number of conductance states during LTP or weight increase
-	maxNumLevelLTD = 100;	// Maximum number of conductance states during LTD or weight decrease
+	maxNumLevelLTP = 25;	// Maximum number of conductance states during LTP or weight increase
+	maxNumLevelLTD = 25;	// Maximum number of conductance states during LTD or weight decrease
 	numPulse = 0;	// Number of write pulses used in the most recent write operation (dynamic variable)
 	cmosAccess = true;	// True: Pseudo-crossbar (1T1R), false: cross-point
-    FeFET = false;		// True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
-	gateCapFeFET = 2.1717e-18;	// Gate capacitance of FeFET (F)
+    FeFET = true;		// True: FeFET structure (Pseudo-crossbar only, should be cmosAccess=1)
+	gateCapFeFET = 17.26e-9;	// Gate capacitance of FeFET (F)
 	resistanceAccess = 15e3;	// The resistance of transistor (Ohm) in Pseudo-crossbar array when turned ON
 	nonlinearIV = false;	// Consider I-V nonlinearity or not (Currently for cross-point array only)
 	NL = 10;    // I-V nonlinearity in write scheme (the current ratio between Vw and Vw/2), assuming for the LTP side
@@ -289,14 +289,14 @@ RealDevice::RealDevice(int x, int y) {
 	nonlinearWrite = true;	// Consider weight update nonlinearity or not
 	nonIdenticalPulse = false;	// Use non-identical pulse scheme in weight update or not
 	if (nonIdenticalPulse) {
-		VinitLTP = 2.85;	// Initial write voltage for LTP or weight increase (V)
-		VstepLTP = 0.05;	// Write voltage step for LTP or weight increase (V)
-		VinitLTD = 2.1;		// Initial write voltage for LTD or weight decrease (V)
-		VstepLTD = 0.05; 	// Write voltage step for LTD or weight decrease (V)
-		PWinitLTP = 75e-9;	// Initial write pulse width for LTP or weight increase (s)
-		PWstepLTP = 5e-9;	// Write pulse width for LTP or weight increase (s)
-		PWinitLTD = 75e-9;	// Initial write pulse width for LTD or weight decrease (s)
-		PWstepLTD = 5e-9;	// Write pulse width for LTD or weight decrease (s)
+		VinitLTP = 2.7;	// Initial write voltage for LTP or weight increase (V)
+		VstepLTP = 0.025;	// Write voltage step for LTP or weight increase (V)
+		VinitLTD = -2;		// Initial write voltage for LTD or weight decrease (V)
+		VstepLTD = 0.025; 	// Write voltage step for LTD or weight decrease (V)
+		PWinitLTP = 10e-3;	// Initial write pulse width for LTP or weight increase (s)
+		PWstepLTP = 0;	// Write pulse width for LTP or weight increase (s)
+		PWinitLTD = 10e-3;	// Initial write pulse width for LTD or weight decrease (s)
+		PWstepLTD = 0;	// Write pulse width for LTD or weight decrease (s)
 		writeVoltageSquareSum = 0;	// Sum of V^2 of non-identical pulses (dynamic variable)
 	}
 	readNoise = false;		// Consider read noise or not
@@ -307,8 +307,8 @@ RealDevice::RealDevice(int x, int y) {
 	localGen.seed(std::time(0));
 	
 	/* Device-to-device weight update variation */
-	NL_LTP = 2.4;	// LTP nonlinearity
-	NL_LTD = -4.88;	// LTD nonlinearity
+	NL_LTP = -0.43;	// LTP nonlinearity
+	NL_LTD = -1.43;	// LTD nonlinearity
 	sigmaDtoD = 0;	// Sigma of device-to-device weight update vairation in gaussian distribution
 	gaussian_dist2 = new std::normal_distribution<double>(0, sigmaDtoD);	// Set up mean and stddev for device-to-device weight update vairation
 	paramALTP = getParamA(NL_LTP + (*gaussian_dist2)(localGen)) * maxNumLevelLTP;	// Parameter A for LTP nonlinearity
