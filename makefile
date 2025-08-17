@@ -68,4 +68,3 @@ clean:
 NOW := $(shell date +"%Y%m%d_%H%M%S")
 run:
 	stdbuf -o 0 ./$(MAINS:.cpp=) | tee log_$(NOW).txt
-
